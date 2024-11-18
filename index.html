@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="static/js/paper-full.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      canvas {
+        background-color: #4CAF50;
+      }
+      #newGameBtn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 10px 20px;
+        background-color: #2196F3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        z-index: 1000;
+      }
+      #newGameBtn:hover {
+        background-color: #1976D2;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="newGameBtn" onclick="startNewGame()">New Game</button>
+    <canvas id="canvas" resize></canvas>
+    <script type="text/javascript" src="static/js/utils/math-conversions.js"></script>
+    <script type="text/javascript" src="static/js/socket-events.js"></script>
+    <script type="text/javascript" src="static/js/ball.js"></script>
+    <script type="text/javascript" src="static/js/field.js"></script>
+    <script type="text/javascript" src="static/js/player.js"></script>
+    <script type="text/javascript" src="static/js/main.js"></script>
+  </body>
+</html>
