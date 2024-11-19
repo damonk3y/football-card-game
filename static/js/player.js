@@ -1,8 +1,8 @@
 function drawPlayer(x, y, number, color) {
-	const playerRadius = view.size.height * 0.02;
+	const playerRadius = view.size.height * 0.0075;
 
 	const player = new Path.Circle({
-		center: [FIELD_X + x, FIELD_Y + y],
+		center: [x, y],
 		radius: playerRadius,
 		strokeColor: color,
 		strokeWidth: 2,
@@ -10,7 +10,7 @@ function drawPlayer(x, y, number, color) {
 	});
 
 	const text = new PointText({
-		point: [FIELD_X + x, FIELD_Y + y + playerRadius / 3],
+		point: [x, y + playerRadius / 3],
 		content: number.toString(),
 		fillColor: "white",
 		fontFamily: "Arial",

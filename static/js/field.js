@@ -4,7 +4,7 @@ let FIELD_X, FIELD_Y, FIELD_WIDTH, FIELD_HEIGHT;
 
 function drawField() {
 	FIELD_HEIGHT = view.size.height * 0.8;
-	FIELD_WIDTH = FIELD_HEIGHT * 0.7;
+	FIELD_WIDTH = FIELD_HEIGHT * 0.65;
 	FIELD_X = (view.size.width - FIELD_WIDTH) / 2;
 	FIELD_Y = (view.size.height - FIELD_HEIGHT) / 2;
 
@@ -34,14 +34,14 @@ function drawField() {
 
 	var centerCircle = new Path.Circle({
 		center: [FIELD_X + FIELD_WIDTH / 2, FIELD_Y + FIELD_HEIGHT / 2],
-		radius: FIELD_WIDTH / 10,
+		radius: FIELD_HEIGHT * 0.1,
 		strokeColor: "white",
 		strokeWidth: 2,
 	});
 
 	function drawPenaltyArea(isTop) {
-		const penaltyHeight = FIELD_HEIGHT * 0.2;
-		const penaltyWidth = FIELD_WIDTH * 0.44;
+		const penaltyHeight = FIELD_HEIGHT * 0.165;
+		const penaltyWidth = FIELD_WIDTH * 0.4;
 		const penaltyX = FIELD_X + (FIELD_WIDTH - penaltyWidth) / 2;
 		const penaltyY = isTop ? FIELD_Y : FIELD_Y + FIELD_HEIGHT - penaltyHeight;
 
@@ -53,12 +53,9 @@ function drawField() {
 		});
 	}
 
-	drawPenaltyArea(true);
-	drawPenaltyArea(false);
-
 	function drawGoalArea(isTop) {
-		const goalHeight = FIELD_HEIGHT * 0.08;
-		const goalWidth = FIELD_WIDTH * 0.2;
+		const goalHeight = FIELD_HEIGHT * 0.055;
+		const goalWidth = FIELD_WIDTH * 0.185;
 		const goalX = FIELD_X + (FIELD_WIDTH - goalWidth) / 2;
 		const goalY = isTop ? FIELD_Y : FIELD_Y + FIELD_HEIGHT - goalHeight;
 
@@ -70,6 +67,8 @@ function drawField() {
 		});
 	}
 
+	drawPenaltyArea(true);
+	drawPenaltyArea(false);
 	drawGoalArea(true);
 	drawGoalArea(false);
 }

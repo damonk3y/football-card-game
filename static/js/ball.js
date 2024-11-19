@@ -1,5 +1,5 @@
 function drawBall(x, y) {
-	const ballSize = FIELD_WIDTH * 0.02;
+	const ballSize = FIELD_WIDTH * 0.01;
 
 	const ball = new Path.Circle({
 		center: [x, y],
@@ -21,23 +21,6 @@ function drawBall(x, y) {
 		strokeWidth: 1.2,
 		fillColor: new Color(0.95, 0.95, 0.95),
 	});
-
-	for (let i = 0; i < 6; i++) {
-		const angle = i * 60;
-		const radians = angle * (Math.PI / 180);
-		const centerX = x + Math.cos(radians) * hexagonSize;
-		const centerY = y + Math.sin(radians) * hexagonSize;
-
-		new Path.RegularPolygon({
-			center: [centerX, centerY],
-			sides: 5,
-			radius: ballSize * 0.35,
-			strokeColor: "black",
-			fillColor: new Color(0.98, 0.98, 0.98),
-			strokeWidth: 1.2,
-			rotation: angle + 30,
-		});
-	}
 
 	return { ball, pattern: centerHexagon };
 }

@@ -16,11 +16,11 @@ io.on("connection", (socket) => {
 	socket.on("new_game", async () => {
         const game = new Game();
         socket.emit("new_game_started", game);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        for (let i = 0; i < 100; i++) {
+		await new Promise(resolve => setTimeout(resolve, 25));
+        for (let i = 0; i < 500; i++) {
             game.nextGameTick();
             socket.emit("game_tick", game);
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 25));
         }
 	});
 	socket.on("disconnect", () => {
