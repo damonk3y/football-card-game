@@ -55,12 +55,6 @@ socket.on("new_game_started", (data) => {
 });
 
 socket.on("game_tick", (data) => {
-	const ballItems = ITEM_MAP.get(data.ball.id);
-	Object.keys(ballItems).forEach((key) => {
-		ballItems[key].position = new Point(
-			convertServerCoordinatesToPaper(data.ball.x, data.ball.y),
-		);
-	});
 	data.teams[0].players.forEach((player) => {
 		const playerItems = ITEM_MAP.get(player.id);
 		Object.keys(playerItems).forEach((key) => {
@@ -86,5 +80,22 @@ socket.on("game_tick", (data) => {
 				parsedCoordinates.y,
 			);
 		});
+	});
+
+	const ballItems = ITEM_MAP.get(data.ball.id);
+	Object.keys(ballItems).forEach((key) => {
+		const ballItem = ballItems[key];
+		const position = convertServerCoordinatesToPaper(data.ball.x, data.ball.y);
+		ballItem.position = new Point(position);
+		
+		const scale = 1 + (data.ball.z / 200);
+		const minScale = 0.5;
+		ballItem.scaling = new Point(
+			Math.max(scale, minScale),
+			Math.max(scale, minScale)
+		);
+		
+		const spinAmount = Math.sqrt(data.ball.spinX ** 2 + data.ball.spinY ** 2) * 5;
+		ballItem.rotate(spinAmount);
 	});
 });

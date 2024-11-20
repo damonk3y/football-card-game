@@ -1,5 +1,5 @@
 function drawPlayer(x, y, number, color) {
-	const playerRadius = view.size.height * 0.0075;
+	const playerRadius = view.size.height * 0.012;
 
 	const player = new Path.Circle({
 		center: [x, y],

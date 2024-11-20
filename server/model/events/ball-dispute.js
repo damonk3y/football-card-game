@@ -50,7 +50,7 @@ export const detectBallDisputeEvent = (game) => {
 			playerWithBall.hasBall = false;
 			playerWithBall.shortTermGoal = "KEEP_POSITION";
 			successfulTackle.tackler.hasBall = true;
-			successfulTackle.tackler.shortTermGoal = "TOWARDS_GOAL";
+			successfulTackle.tackler.shortTermGoal = "CARRY_BALL_TOWARDS_GOAL";
 			ball.x = successfulTackle.tackler.x;
 			ball.y = successfulTackle.tackler.y;
 		} else {

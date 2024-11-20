@@ -1,38 +1,39 @@
 export class PlayerStats {
     constructor() {
         this.physicalStats = {
-            speed: 35, // Top speed in m/s
-            acceleration: 8.2, // Meters per second squared (m/s²)
+            speed: 16,            // meters per second
+            acceleration: 16      // meters per second squared
         };
 
         this.offensiveStats = {
-            ballControl: 50,
-            dribbling: 50,
-            passing: 50,
-            vision: 50,
-            crossing: 50,
-            shooting: 50,
-            finishing: 50,
-            longShots: 50,
-            volleys: 50,
-            penalties: 50,
-            positioning: 50,
-            speedInPossession: 18, // Speed in possession in m/s
+            ballControl: 90,          // rating out of 100
+            dribbling: 90,            // rating out of 100
+            passing: 50,              // rating out of 100
+            vision: 50,               // rating out of 100
+            crossing: 50,             // rating out of 100
+            shooting: 50,             // rating out of 100
+            finishing: 50,            // rating out of 100
+            longShots: 50,            // rating out of 100
+            volleys: 50,              // rating out of 100
+            penalties: 50,            // rating out of 100
+            positioning: 50,          // rating out of 100
+            speedInPossession: 8,    // meters per second
+            ballSpin: 8              // rotations per second
         };
 
         this.defensiveStats = {
-            tackling: 50,
-            marking: 50,
-            interceptions: 50,
-            heading: 50
+            tackling: 50,     // rating out of 100
+            marking: 50,      // rating out of 100
+            interceptions: 50, // rating out of 100
+            heading: 50       // rating out of 100
         };
 
         this.goalkeeperStats = {
-            reflexes: 50,
-            diving: 50,
-            handling: 50,
-            positioning: 50,
-            kicking: 50
+            reflexes: 50,     // rating out of 100
+            diving: 50,       // rating out of 100
+            handling: 50,     // rating out of 100
+            positioning: 50,  // rating out of 100
+            kicking: 50       // rating out of 100
         };
     }
 }

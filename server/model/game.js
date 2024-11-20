@@ -19,10 +19,10 @@ export function Game() {
 			this.lastGameTick = Date.now();
 			return;
 		}
-		const event = detectBallDisputeEvent(this);
-		if (event) {
-			this.events.push(event);
-		}
+		// const event = detectBallDisputeEvent(this);
+		// if (event) {
+		// 	this.events.push(event);
+		//}
 		const deltaTime = Date.now() - this.lastGameTick;
 		this.teams.forEach((team, index) => {
 			team.players.forEach((player) => {
@@ -33,6 +33,7 @@ export function Game() {
 				);
 			});
 		});
+		this.ball.update(deltaTime);
 		this.lastGameTick = Date.now();
 	};
 }
