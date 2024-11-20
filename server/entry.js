@@ -1,6 +1,6 @@
-import express from "express"
-import { createServer } from "http"
-import { Server } from "socket.io"
+import express from "express";
+import { createServer } from "http";
+import { Server } from "socket.io";
 import { Game } from "./model/game.js";
 
 const app = express();
@@ -14,14 +14,14 @@ const io = new Server(httpServer, {
 io.on("connection", (socket) => {
 	console.log("-> new client connected");
 	socket.on("new_game", async () => {
-        const game = new Game();
-        socket.emit("new_game_started", game);
-		await new Promise(resolve => setTimeout(resolve, 25));
-        for (let i = 0; i < 500; i++) {
-            game.nextGameTick();
-            socket.emit("game_tick", game);
-            await new Promise(resolve => setTimeout(resolve, 25));
-        }
+		const game = new Game();
+		socket.emit("new_game_started", game);
+		await new Promise((resolve) => setTimeout(resolve, 25));
+		for (let i = 0; i < 200; i++) {
+			game.nextGameTick();
+			socket.emit("game_tick", game);
+			await new Promise((resolve) => setTimeout(resolve, 25));
+		}
 	});
 	socket.on("disconnect", () => {
 		socket.rooms.forEach((room) => {

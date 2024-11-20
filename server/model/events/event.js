@@ -7,11 +7,11 @@
  * @property {string} result - "SUCCESS" | "FAIL"
  */
 export class Event {
-    constructor(type, players, goalsBeforeEvent, goalsAfterEvent, result) {
-        this.type = type;
-        this.impactedPlayers = players;
-        this.goalsBeforeEvent = goalsBeforeEvent;
-        this.goalsAfterEvent = goalsAfterEvent;
-        this.result = result;
-    }
+	constructor(type, players, goalsBeforeEvent, goalsAfterEvent, result) {
+		this.type = type;
+		this.impactedPlayers = players;
+		this.goalsBeforeEvent = goalsBeforeEvent;
+		this.goalsAfterEvent = goalsAfterEvent;
+		this.result = result;
+	}
 }

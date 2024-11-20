@@ -4,12 +4,12 @@ let FIELD_X, FIELD_Y, FIELD_WIDTH, FIELD_HEIGHT;
 
 function drawField() {
 	FIELD_HEIGHT = view.size.height * 0.8;
-	FIELD_WIDTH = FIELD_HEIGHT * 0.65;
-	FIELD_X = (view.size.width - FIELD_WIDTH) / 2;
-	FIELD_Y = (view.size.height - FIELD_HEIGHT) / 2;
+	FIELD_WIDTH = FIELD_HEIGHT * 0.7;
+	FIELD_X = 24;
+	FIELD_Y = 24;
 
 	const stripeWidth = FIELD_WIDTH / 12;
-	    for (let x = 0; x < FIELD_WIDTH; x += stripeWidth * 2) {
+	for (let x = 0; x < FIELD_WIDTH; x += stripeWidth * 2) {
 		new Path.Rectangle({
 			point: [FIELD_X + x, FIELD_Y],
 			size: [stripeWidth, FIELD_HEIGHT],

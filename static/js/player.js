@@ -24,14 +24,3 @@ function drawPlayer(x, y, number, color) {
 		number: text,
 	};
 }
-
-function drawTeam(positions, teamColor) {
-	const players = [];
-
-	positions.forEach((pos, index) => {
-		const player = drawPlayer(pos.x, pos.y, index + 1, teamColor);
-		players.push(player);
-	});
-
-	return players;
-}
