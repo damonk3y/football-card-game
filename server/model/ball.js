@@ -19,7 +19,9 @@ export class Ball {
 		this.gravity = 9.8; // m/s^2
 		this.radius = 0.2;
 		this.bounceRestitution = 0.7;
-		this.magnusStrength = 0.3;
+		this.magnusStrength = 0.15;
+		this.spinDecay = 0.997;
+		this.maxSpin = 10;
 	}
 
 	update = (deltaTime) => {
@@ -30,13 +32,17 @@ export class Ball {
 		const speed = Math.sqrt(this.velocityX ** 2 + this.velocityY ** 2 + this.velocityZ ** 2);
 		if (speed > 0) {
 			const magnusForce = {
-				x: (this.spinY * this.velocityZ - this.spinZ * this.velocityY) * this.magnusStrength,
-				y: (this.spinZ * this.velocityX - this.spinX * this.velocityZ) * this.magnusStrength,
-				z: (this.spinX * this.velocityY - this.spinY * this.velocityX) * this.magnusStrength
+				x: (this.spinY * this.velocityZ - this.spinZ * this.velocityY) * this.magnusStrength * (speed * 0.5),
+				y: (this.spinZ * this.velocityX - this.spinX * this.velocityZ) * this.magnusStrength * (speed * 0.5),
+				z: (this.spinX * this.velocityY - this.spinY * this.velocityX) * this.magnusStrength * (speed * 0.5)
 			};
 			this.velocityX += magnusForce.x * timeStep;
 			this.velocityY += magnusForce.y * timeStep;
 			this.velocityZ += magnusForce.z * timeStep;
+
+			this.spinX *= this.spinDecay;
+			this.spinY *= this.spinDecay;
+			this.spinZ *= this.spinDecay;
 		}
 
 		this.x += this.velocityX * timeStep;
@@ -108,7 +114,8 @@ export class Ball {
 		this.velocityY = Math.sin(adjustedHorizontalAngle) * horizontalPower;
 		this.velocityZ = Math.sin(verticalAngle) * power;
 		
-		this.spinX = -Math.sin(adjustedHorizontalAngle) * spin;
-		this.spinY = Math.cos(adjustedHorizontalAngle) * spin;
+		const clampedSpin = Math.min(Math.abs(spin), this.maxSpin) * Math.sign(spin);
+		this.spinX = -Math.sin(adjustedHorizontalAngle) * clampedSpin;
+		this.spinY = Math.cos(adjustedHorizontalAngle) * clampedSpin;
 	}
 }

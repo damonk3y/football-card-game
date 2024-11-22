@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { Field } from "./field.js";
 import { Ball } from "./ball.js";
 import { Team } from "./team.js";
-import { detectBallDisputeEvent } from "./events/ball-dispute.js";
+// import { detectBallDisputeEvent } from "./events/ball-dispute.js";
 
 export function Game() {
 	this.id = nanoid();
@@ -26,9 +26,12 @@ export function Game() {
 		const deltaTime = Date.now() - this.lastGameTick;
 		this.teams.forEach((team, index) => {
 			team.players.forEach((player) => {
+				const ownTeam = index === 0 ? this.teams[0] : this.teams[1];
+				const enemyTeam = index === 0 ? this.teams[1] : this.teams[0];
 				player.move(
 					deltaTime,
-					index === 0 ? this.teams[1] : this.teams[0],
+					ownTeam,
+					enemyTeam,
 					this.ball,
 				);
 			});
