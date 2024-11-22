@@ -17,9 +17,9 @@ export class Ball {
 		this.airResistance = 0.99;
 		this.groundFriction = 0.95;
 		this.gravity = 9.8; // m/s^2
-		this.radius = 5;
+		this.radius = 0.2;
 		this.bounceRestitution = 0.7;
-		this.magnusStrength = 1.5;
+		this.magnusStrength = 0.3;
 	}
 
 	update = (deltaTime) => {
@@ -100,13 +100,15 @@ export class Ball {
 		this.velocityY = isNaN(this.velocityY) ? 0 : this.velocityY;
 	}
 
-	kick = (power, horizontalAngle, verticalAngle, spin = 0) => {
+	kick = (power, horizontalAngle, verticalAngle, spin = 0, mistakeRate = 0.1) => {
+		const angleError = (Math.random() - 0.5) * mistakeRate * Math.PI;
+		const adjustedHorizontalAngle = horizontalAngle + angleError;
 		const horizontalPower = power * Math.cos(verticalAngle);
-		this.velocityX = Math.cos(horizontalAngle) * horizontalPower;
-		this.velocityY = Math.sin(horizontalAngle) * horizontalPower;
+		this.velocityX = Math.cos(adjustedHorizontalAngle) * horizontalPower;
+		this.velocityY = Math.sin(adjustedHorizontalAngle) * horizontalPower;
 		this.velocityZ = Math.sin(verticalAngle) * power;
 		
-		this.spinX = -Math.sin(horizontalAngle) * spin;
-		this.spinY = Math.cos(horizontalAngle) * spin;
+		this.spinX = -Math.sin(adjustedHorizontalAngle) * spin;
+		this.spinY = Math.cos(adjustedHorizontalAngle) * spin;
 	}
 }

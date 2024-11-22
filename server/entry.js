@@ -22,7 +22,6 @@ io.on("connection", (socket) => {
 			socket.emit("game_tick", game);
 			await new Promise((resolve) => setTimeout(resolve, 25));
 		}
-		game.ball.update(1000);
 	});
 	socket.on("disconnect", () => {
 		socket.rooms.forEach((room) => {

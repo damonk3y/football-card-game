@@ -7,7 +7,7 @@ export class PlayerStats {
 
         this.offensiveStats = {
             ballControl: 90,          // rating out of 100
-            dribbling: 90,            // rating out of 100
+            dribbling: 99,            // rating out of 100
             passing: 50,              // rating out of 100
             vision: 50,               // rating out of 100
             crossing: 50,             // rating out of 100

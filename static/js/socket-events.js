@@ -88,7 +88,7 @@ socket.on("game_tick", (data) => {
 		const position = convertServerCoordinatesToPaper(data.ball.x, data.ball.y);
 		ballItem.position = new Point(position);
 		
-		const scale = 1 + (data.ball.z / 200);
+		const scale = 1 + (data.ball.z / 140);
 		const minScale = 0.5;
 		ballItem.scaling = new Point(
 			Math.max(scale, minScale),
