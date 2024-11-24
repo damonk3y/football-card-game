@@ -1,7 +1,7 @@
 export class PlayerStats {
     constructor() {
         this.physicalStats = {
-            speed: 16,            // meters per second
+            speed: 10,            // meters per second
             acceleration: 16      // meters per second squared
         };
 

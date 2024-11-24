@@ -3,7 +3,7 @@ const SERVER_FIELD_HEIGHT = 42;
 let FIELD_X, FIELD_Y, FIELD_WIDTH, FIELD_HEIGHT;
 
 function drawField() {
-	FIELD_HEIGHT = view.size.height * 0.8;
+	FIELD_HEIGHT = view.size.height * 0.45;
 	FIELD_WIDTH = FIELD_HEIGHT * 0.7;
 	FIELD_X = 24;
 	FIELD_Y = 24;

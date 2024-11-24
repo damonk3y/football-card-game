@@ -11,3 +11,17 @@ export const getDistanceToLine = (x, y, lineStartX, lineStartY, lineEndX, lineEn
     const denominator = Math.sqrt((lineEndY - lineStartY) ** 2 + (lineEndX - lineStartX) ** 2);
     return numerator / denominator;
 }
+
+export const findNearestOpponent = (player, opponents) => {
+    return opponents.reduce((nearest, opponent) => {
+        const distanceToOpponent = Math.sqrt(
+            Math.pow(player.x - opponent.x, 2) + 
+            Math.pow(player.y - opponent.y, 2)
+        );
+        
+        if (!nearest || distanceToOpponent < nearest.distance) {
+            return { ...opponent, distance: distanceToOpponent };
+        }
+        return nearest;
+    }, null);
+}

@@ -1,12 +1,13 @@
 import { nanoid } from "nanoid";
 import { FIELD_WIDTH, FIELD_HEIGHT } from "../field.js";
 import { PlayerStats } from "./stats.js";
-import { getAngleBetweenPoints, getDistanceBetweenPoints } from "../../helpers/map.js";
+import { findNearestOpponent, getAngleBetweenPoints, getDistanceBetweenPoints } from "../../helpers/map.js";
 
 export const SHORT_TERM_GOALS = Object.freeze({
     KEEP_POSITION: "KEEP_POSITION",
     PRESS_BALL: "PRESS_BALL",
     CARRY_BALL_TOWARDS_GOAL: "CARRY_BALL_TOWARDS_GOAL",
+    RECEIVE_PASS: "RECEIVE_PASS"
 });
 
 /**
@@ -40,12 +41,77 @@ export class BasePlayer {
             [SHORT_TERM_GOALS.KEEP_POSITION]: this.keepPosition,
             [SHORT_TERM_GOALS.PRESS_BALL]: this.pressBall,
             [SHORT_TERM_GOALS.CARRY_BALL_TOWARDS_GOAL]: this.carryBallTowardsGoal,
-            [SHORT_TERM_GOALS.SAFE_PASS]: this.safePass
+            [SHORT_TERM_GOALS.SAFE_PASS]: this.safePass,
+            [SHORT_TERM_GOALS.RECEIVE_PASS]: this.receivePass
         }
     }
 
-    keepPosition = () => {
-        return { x: 0, y: 0 };
+    keepPosition = (deltaTime, ownTeam, enemyTeam, ball) => {
+        const ownTeamHasPossession = ownTeam.players.some(p => p.hasBall);
+        
+        if (ownTeamHasPossession) {
+            const ballHolder = ownTeam.players.find(p => p.hasBall);
+            const idealDistance = 4;
+            
+            const xDiffFromBall = ballHolder.x - this.x;
+            const yDiffFromBall = ballHolder.y - this.y;
+            const currentDistance = Math.sqrt(xDiffFromBall * xDiffFromBall + yDiffFromBall * yDiffFromBall);
+            
+            let dx = 0;
+            let dy = 0;
+            
+            const nearestEnemy = enemyTeam.players.reduce((closest, player) => {
+                const distance = Math.sqrt(
+                    Math.pow(player.x - this.x, 2) + 
+                    Math.pow(player.y - this.y, 2)
+                );
+                return (!closest || distance < closest.distance) 
+                    ? { player, distance }
+                    : closest;
+            }, null);
+            if (currentDistance < idealDistance) {
+                dx = -xDiffFromBall * 0.1;
+                dy = -yDiffFromBall * 0.1;
+            } else if (currentDistance > idealDistance * 1.5) {
+                dx = xDiffFromBall * 0.1;
+                dy = yDiffFromBall * 0.1;
+            } else {
+                dx = (FIELD_WIDTH / 2 - this.x) * 0.02;
+                dy = (FIELD_HEIGHT / 2 - this.y) * 0.02;
+            }
+            
+            const magnitude = Math.sqrt(dx * dx + dy * dy);
+            if (magnitude > 0) {
+                const normalizedX = dx / magnitude;
+                const normalizedY = dy / magnitude;
+                
+                return {
+                    x: normalizedX * (this.stats.physicalStats.speed * (deltaTime / 1000) * 0.5),
+                    y: normalizedY * (this.stats.physicalStats.speed * (deltaTime / 1000) * 0.5)
+                };
+            }
+            return { x: 0, y: 0 };
+        } else {
+            const ownGoal = ownTeam.playingSide === "bottom" ? { x: FIELD_WIDTH / 2, y: FIELD_HEIGHT } : { x: FIELD_WIDTH / 2, y: 0 };
+            const nearestOpponent = findNearestOpponent(this, enemyTeam.players);
+            const markingDistance = 0.2;
+            
+            const targetPosition = {
+                x: nearestOpponent.x - markingDistance * Math.sign(ownGoal.x - nearestOpponent.x),
+                y: nearestOpponent.y
+            };
+
+            const dx = targetPosition.x - this.x;
+            const dy = targetPosition.y - this.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const normalizedX = dx / distance;
+            const normalizedY = dy / distance;
+            
+            return {
+                x: normalizedX * (this.stats.physicalStats.speed * (deltaTime / 1000)),
+                y: normalizedY * (this.stats.physicalStats.speed * (deltaTime / 1000))
+            };
+        }
     }
 
     pressBall = (deltaTime, _, __, ball) => {
@@ -63,7 +129,7 @@ export class BasePlayer {
     }
 
     carryBallTowardsGoal = (deltaTime, ownTeam, enemyTeam, ball) => {
-        const shouldPass = Math.random() < 0.5;
+        const shouldPass = Math.random() < 0.4;
         if (shouldPass) {
             this.safePass(deltaTime, ownTeam, enemyTeam, ball);
             return { x: 0, y: 0 };
@@ -138,6 +204,7 @@ export class BasePlayer {
                 bestTeammate.y - this.y,
                 bestTeammate.x - this.x
             );
+            bestTeammate.shortTermGoal = SHORT_TERM_GOALS.RECEIVE_PASS;
             
             const distance = Math.hypot(
                 bestTeammate.x - this.x,
@@ -146,7 +213,7 @@ export class BasePlayer {
 
             const power = Math.min(distance * 1.5, 30);
             const verticalAngle = 0.1;
-            const spin = 20;
+            const spin = 3;
             const mistakeRate = 0.15;
 
             ball.kick(power, horizontalAngle, verticalAngle, spin, mistakeRate);
@@ -155,6 +222,36 @@ export class BasePlayer {
 
         return { x: bestTeammate?.x || 0, y: bestTeammate?.y || 0 };
     }
+
+    receivePass = (deltaTime, ownTeam, enemyTeam, ball) => {
+        console.log(this.x)
+        const distanceToBall = Math.sqrt(
+            Math.pow(this.x - ball.x, 2) + 
+            Math.pow(this.y - ball.y, 2)
+        );
+
+        if (distanceToBall < 0.7) {
+            this.shortTermGoal = 'CARRY_BALL_TOWARDS_GOAL';
+            return { x: 0, y: 0 };
+        }
+
+        const directionX = ball.x - this.x;
+        const directionY = ball.y - this.y;
+        const length = Math.sqrt(directionX * directionX + directionY * directionY);
+        console.log(directionX, directionY)
+        if (!directionX || !directionY) {
+            process.exit(0)
+        }
+        const normalizedX = directionX / length;
+        const normalizedY = directionY / length;
+        const distanceThisFrame = this.stats.physicalStats.speed * (deltaTime / 1000);
+    
+        
+        return {
+            x: normalizedX * distanceThisFrame,
+            y: normalizedY * distanceThisFrame
+        };
+    };
 
     move = (deltaTime, ownTeam, enemyTeam, ball) => {
         const movement = this.movements[this.shortTermGoal](deltaTime, ownTeam, enemyTeam, ball);
